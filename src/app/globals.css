@@ -3,59 +3,151 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-rgb: 255, 255, 255;
+  --foreground-rgb: 17, 24, 39;
+  --background-start-rgb: 250, 250, 250;
+  --background-end-rgb: 255, 255, 255;
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --secondary: #7c3aed;
+  --accent: #f43f5e;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --foreground-rgb: 255, 255, 255;
-    --background-rgb: 17, 24, 39;
+    --background-start-rgb: 17, 24, 39;
+    --background-end-rgb: 11, 15, 25;
+    --primary: #3b82f6;
+    --primary-dark: #2563eb;
+    --secondary: #8b5cf6;
+    --accent: #f43f5e;
   }
 }
 
-html {
-  scroll-behavior: smooth;
+@layer base {
+  body {
+    @apply bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))] text-[rgb(var(--foreground-rgb))];
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
-}
-
-/* Custom scrollbar */
+/* Modern Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgb(var(--background-rgb));
+  @apply bg-transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 5px;
+  @apply bg-gray-400/50 rounded-full hover:bg-gray-400/70 transition-colors;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #666;
+/* Modern Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-/* Smooth transitions */
-.transition-colors {
-  transition-property: color, background-color, border-color;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+/* Modern Components */
+.glass-card {
+  @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border border-gray-200/50 dark:border-gray-800/50 shadow-lg rounded-2xl;
+}
+
+.glass-nav {
+  @apply bg-white/70 dark:bg-gray-900/70 backdrop-blur-lg border-b border-gray-200/50 dark:border-gray-800/50;
+}
+
+.hover-card {
+  @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-xl;
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+}
+
+/* Modern Buttons */
+.modern-button {
+  @apply px-6 py-3 rounded-xl font-medium transition-all duration-300 
+         transform hover:scale-105 active:scale-95
+         shadow-lg hover:shadow-xl
+         bg-gradient-to-r from-primary to-primary-dark
+         text-white hover:brightness-110;
+}
+
+.social-button {
+  @apply px-6 py-3 rounded-xl font-medium transition-all duration-300
+         transform hover:scale-105 active:scale-95
+         shadow-lg hover:shadow-xl
+         text-white;
+}
+
+/* Modern Grid Layout */
+.modern-grid {
+  @apply grid gap-6 md:gap-8;
+}
+
+/* Modern Section Spacing */
+.section-spacing {
+  @apply py-20 md:py-32;
+}
+
+/* Modern Container */
+.modern-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+/* Modern Typography */
+.modern-heading {
+  @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight;
+}
+
+.modern-subheading {
+  @apply text-2xl md:text-3xl font-semibold tracking-tight;
+}
+
+.modern-text {
+  @apply text-lg text-gray-600 dark:text-gray-300 leading-relaxed;
+}
+
+/* Modern Card */
+.modern-card {
+  @apply glass-card p-6 hover-card;
+}
+
+/* Modern Navigation */
+.modern-nav-link {
+  @apply px-4 py-2 rounded-lg transition-colors
+         hover:bg-gray-100 dark:hover:bg-gray-800
+         text-gray-700 dark:text-gray-300
+         hover:text-primary dark:hover:text-primary;
+}
+
+/* Modern Video Container */
+.video-container {
+  @apply rounded-2xl overflow-hidden shadow-xl
+         transform transition-all duration-300
+         hover:scale-[1.02] hover:shadow-2xl;
 }
 
 /* TikTok embed styles */
 .tiktok-embed {
-  margin: 0 !important;
-  max-width: 100% !important;
-  width: 100% !important;
-  min-width: 325px !important;
-  border: none !important;
-  overflow: hidden !important;
-  border-radius: 0.5rem !important;
-  background: transparent !important;
+  @apply rounded-2xl overflow-hidden shadow-xl
+         transform transition-all duration-300
+         hover:scale-[1.02] hover:shadow-2xl;
 }
