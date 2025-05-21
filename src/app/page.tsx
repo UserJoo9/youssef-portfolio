@@ -1,5 +1,8 @@
 import Link from 'next/link'
 import TikTokEmbed from './components/TikTokEmbed'
+import SkillTree from './components/SkillTree'
+import Timeline from './components/Timeline'
+import { skills, experience, education, achievements } from './data/profile'
 
 export default function Home() {
   return (
@@ -16,6 +19,7 @@ export default function Home() {
             <div className="hidden md:flex items-center space-x-1">
               <Link href="#about" className="modern-nav-link">About</Link>
               <Link href="#skills" className="modern-nav-link">Skills</Link>
+              <Link href="#experience" className="modern-nav-link">Experience</Link>
               <Link href="#videos" className="modern-nav-link">Videos</Link>
               <Link href="#contact" className="modern-nav-link">Contact</Link>
             </div>
@@ -65,39 +69,46 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About Section */}
-      <section id="about" className="section-spacing bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+      {/* Achievements Section */}
+      <section className="section-spacing bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
         <div className="modern-container">
-          <h2 className="modern-subheading text-center mb-16">About Me</h2>
-          <div className="modern-grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8 animate-fade-in">
-              <p className="modern-text">
-                I am a passionate content creator dedicated to producing engaging and meaningful content across various social media platforms. 
-                My work focuses on creating authentic connections with my audience while delivering valuable and entertaining content.
-              </p>
-              <p className="modern-text">
-                With a strong presence on YouTube, TikTok, and Instagram, I've built a community of engaged followers who appreciate 
-                my unique perspective and creative approach to content creation.
-              </p>
-            </div>
-            <div className="modern-grid grid-cols-2 gap-6">
-              <div className="modern-card">
-                <h3 className="text-xl font-semibold mb-3 gradient-text">Content Creation</h3>
-                <p className="modern-text">Creating engaging videos and posts that resonate with audiences</p>
+          <h2 className="modern-subheading text-center mb-16">Achievements</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            {achievements.map((achievement, index) => (
+              <div key={index} className="modern-card p-8 hover-card">
+                <h3 className="text-2xl font-semibold mb-4 gradient-text">{achievement.title}</h3>
+                <p className="modern-text mb-6">{achievement.description}</p>
+                <div className="grid grid-cols-3 gap-4">
+                  {achievement.metrics.map((metric, metricIndex) => (
+                    <div key={metricIndex} className="text-center">
+                      <div className="text-2xl font-bold gradient-text">{metric.value}</div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">{metric.label}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="modern-card">
-                <h3 className="text-xl font-semibold mb-3 gradient-text">Social Media</h3>
-                <p className="modern-text">Building and managing strong social media presence</p>
-              </div>
-              <div className="modern-card">
-                <h3 className="text-xl font-semibold mb-3 gradient-text">Community Building</h3>
-                <p className="modern-text">Fostering engaged and interactive communities</p>
-              </div>
-              <div className="modern-card">
-                <h3 className="text-xl font-semibold mb-3 gradient-text">Digital Strategy</h3>
-                <p className="modern-text">Developing effective content strategies</p>
-              </div>
-            </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Skills Section */}
+      <section id="skills" className="section-spacing">
+        <div className="modern-container">
+          <h2 className="modern-subheading text-center mb-16">Skills & Expertise</h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            <SkillTree skills={[skills.contentCreation, skills.technicalSkills]} title="Professional Skills" />
+            <SkillTree skills={[skills.softSkills]} title="Soft Skills" />
+          </div>
+        </div>
+      </section>
+
+      {/* Experience Section */}
+      <section id="experience" className="section-spacing bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+        <div className="modern-container">
+          <div className="grid md:grid-cols-2 gap-8">
+            <Timeline items={experience} title="Professional Experience" />
+            <Timeline items={education} title="Education & Training" />
           </div>
         </div>
       </section>
