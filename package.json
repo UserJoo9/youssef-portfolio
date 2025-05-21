@@ -1,0 +1,15 @@
+{
+  "name": "youssef-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "lucide-react": "^0.267.0",
+    "framer-motion": "^10.16.1"
+  },
+  "scripts": {
+    "start": "webpack serve --mode development --open",
+    "build": "webpack --mode production"
+  }
+}
