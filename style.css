@@ -315,6 +315,14 @@ p {
     z-index: 2;
 }
 
+.hero-profile-img {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    border: 3px solid var(--primary-color);
+    object-fit: cover;
+}
+
 .hero h1 {
     color: white;
     margin-bottom: 1rem;
@@ -411,12 +419,12 @@ p {
     overflow: hidden;
 }
 
-.profile-img {
+.profile-img{
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    position: relative;
-    overflow: hidden;
+    object-fit: cover;
+    border-radius: 20px;
+    display: block;
 }
 
 .profile-img::before {
@@ -630,12 +638,20 @@ p {
     transform: translateY(20px);
 }
 
+.project-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+    display: block;
+}
+
 .project-img {
     height: 200px;
     margin-bottom: 1.5rem;
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-    position: relative;
+    border-radius: 15px;
     overflow: hidden;
+    position: relative;
 }
 
 .project-img::before {
@@ -767,6 +783,10 @@ p {
 
 .timeline-desc {
     color: #ddd;
+}
+
+.timeline-content h3{
+    color: aliceblue;
 }
 
 /* Contact Section */
