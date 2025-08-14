@@ -273,26 +273,94 @@ document.addEventListener('DOMContentLoaded', function() {
     timelineItems.forEach(item => {
         timelineObserver.observe(item);
     });
+
+    // Draw dotted roadmap linking timeline cards across rows
+    function drawTimelineRoadmap() {
+        const timeline = document.querySelector('.timeline');
+        const svg = timeline ? timeline.querySelector('.timeline-svg') : null;
+        if (!timeline || !svg) return;
+
+        // Ensure SVG covers the container
+        const rectTimeline = timeline.getBoundingClientRect();
+        const width = rectTimeline.width;
+        const height = rectTimeline.height;
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+        svg.setAttribute('width', `${width}`);
+        svg.setAttribute('height', `${height}`);
+
+        // Clear previous paths
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+        const cards = Array.from(timeline.querySelectorAll('.timeline-item .timeline-content'));
+        if (cards.length < 2) return;
+
+        // Arrange points into rows of 5, reversing every other row (snake layout)
+        const itemsPerRow = 5;
+        const rectTimeline2 = timeline.getBoundingClientRect();
+        const rawPoints = cards.map((card, index) => {
+            const rect = card.getBoundingClientRect();
+            const x = rect.left - rectTimeline2.left + rect.width / 2;
+            const y = rect.top - rectTimeline2.top + rect.height / 2;
+            return { x, y, index: index + 1, rect };
+        });
+
+        const rows = [];
+        for (let i = 0; i < rawPoints.length; i += itemsPerRow) {
+            const row = rawPoints.slice(i, i + itemsPerRow);
+            if ((rows.length % 2) === 1) row.reverse();
+            rows.push(row);
+        }
+        const points = rows.flat();
+
+        // Create a dotted path connecting all points in DOM order
+        for (let i = 0; i < points.length - 1; i++) {
+            const p1 = points[i];
+            const p2 = points[i + 1];
+
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            // Smooth curved path using quadratic bezier midway between points
+            let d = '';
+            if (Math.abs(p2.y - p1.y) < 5) {
+                // Same row: gentle curve
+                const midX = (p1.x + p2.x) / 2;
+                const ctrlY = p1.y - 30;
+                d = `M ${p1.x} ${p1.y} Q ${midX} ${ctrlY} ${p2.x} ${p2.y}`;
+            } else {
+                // Row change: curve down then to next row end
+                const midX = p1.x; // vertical-ish
+                const ctrlY = (p1.y + p2.y) / 2 - 20;
+                d = `M ${p1.x} ${p1.y} Q ${midX} ${ctrlY} ${p2.x} ${p2.y}`;
+            }
+            path.setAttribute('d', d);
+            path.setAttribute('stroke', 'rgba(255,255,255,0.85)');
+            path.setAttribute('stroke-width', '2');
+            path.setAttribute('fill', 'none');
+            path.setAttribute('stroke-dasharray', '1 10');
+            path.setAttribute('opacity', '0.8');
+            svg.appendChild(path);
+        }
+
+        // Remove any previously added nodes (numbers) if exist
+        timeline.querySelectorAll('.timeline-node').forEach(n => n.remove());
+    }
+
+    // Draw on load and on resize
+    window.addEventListener('load', drawTimelineRoadmap);
+    window.addEventListener('resize', () => {
+        // Debounce resize events
+        clearTimeout(window.__timelineResizeTimer);
+        window.__timelineResizeTimer = setTimeout(drawTimelineRoadmap, 150);
+    });
     
-    // Form submission (prevent default for demo)
+    // Remove demo submission handler to allow real submission
     const contactForm = document.querySelector('.contact-form form');
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+        contactForm.addEventListener('submit', function() {
             const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            
-            submitBtn.textContent = 'Sending...';
-            submitBtn.disabled = true;
-            
-            setTimeout(() => {
-                submitBtn.textContent = 'Message Sent!';
-                setTimeout(() => {
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                    this.reset();
-                }, 1500);
-            }, 1000);
+            if (submitBtn) {
+                submitBtn.textContent = 'Sending...';
+                submitBtn.disabled = true;
+            }
         });
     }
     
