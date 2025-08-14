@@ -294,8 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const cards = Array.from(timeline.querySelectorAll('.timeline-item .timeline-content'));
         if (cards.length < 2) return;
 
-        // Arrange points into rows of 5, reversing every other row (snake layout)
-        const itemsPerRow = 5;
+        // Determine cards per row from computed layout by grouping by approximate y
         const rectTimeline2 = timeline.getBoundingClientRect();
         const rawPoints = cards.map((card, index) => {
             const rect = card.getBoundingClientRect();
@@ -303,13 +302,25 @@ document.addEventListener('DOMContentLoaded', function() {
             const y = rect.top - rectTimeline2.top + rect.height / 2;
             return { x, y, index: index + 1, rect };
         });
-
+        // Group points by rows based on y proximity
         const rows = [];
-        for (let i = 0; i < rawPoints.length; i += itemsPerRow) {
-            const row = rawPoints.slice(i, i + itemsPerRow);
-            if ((rows.length % 2) === 1) row.reverse();
-            rows.push(row);
-        }
+        const threshold = 40; // pixels tolerance to consider same row
+        rawPoints.forEach(pt => {
+            let placed = false;
+            for (const row of rows) {
+                if (Math.abs(row[0].y - pt.y) < threshold) {
+                    row.push(pt);
+                    placed = true;
+                    break;
+                }
+            }
+            if (!placed) rows.push([pt]);
+        });
+        // Sort items in each row left-to-right by x, and reverse every other row to make snake path
+        rows.forEach((row, idx) => {
+            row.sort((a, b) => a.x - b.x);
+            if (idx % 2 === 1) row.reverse();
+        });
         const points = rows.flat();
 
         // Create a dotted path connecting all points in DOM order
