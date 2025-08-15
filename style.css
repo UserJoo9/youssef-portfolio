@@ -316,8 +316,8 @@ p {
 }
 
 .hero-profile-img {
-    width: 300px;
-    height: 300px;
+    width: 250px;
+    height: 250px;
     border-radius: 50%;
     border: 3px solid var(--primary-color);
     object-fit: cover;
@@ -792,94 +792,54 @@ p {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.timeline {
-    position: relative;
+.certs-grid {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 2rem;
-    justify-items: center;
-    align-items: start;
-    padding: 1rem 0 2rem;
-    overflow: visible;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 0;
 }
 
-.timeline::before {
-    content: none;
-}
-
-.timeline-item {
-    position: relative;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.5s ease;
-}
-
-.timeline-item.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.timeline-item:nth-child(odd) {}
-.timeline-item:nth-child(odd).visible {}
-
-.timeline-content {
-    width: 100%;
-    min-height: 180px;
+.cert-card {
     padding: 1.5rem;
     border-radius: 16px;
-    display: block;
     text-align: left;
+    height: 100%; /* Ensure all cards have the same height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.timeline-content h3 {
-    font-size: 1.1rem;
+.cert-card h3 {
+    font-size: 1.15rem;
     line-height: 1.4;
+    color: aliceblue;
+    margin-bottom: 0.5rem;
 }
 
-.timeline-date,
-.timeline-subtitle,
-.timeline-desc {
-    font-size: 0.85rem;
-}
-
-/* Dotted roadmap overlay */
-.timeline-svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: visible;
-    z-index: 0;
-}
-
-.timeline .glass-card {
-    position: relative;
-    z-index: 1;
-}
-
-/* Roadmap numbered nodes */
-.timeline-node { display: none; }
-
-.timeline-date {
+.cert-date {
     color: var(--primary-color);
     font-weight: 600;
-    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
 }
 
-.timeline-subtitle {
+.cert-provider {
     color: white;
     font-weight: 500;
-    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
 }
 
-.timeline-desc {
-    color: #ddd;
+/* Responsive adjustments for certificates */
+@media (max-width: 768px) {
+    .certs-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-.timeline-content h3{
-    color: aliceblue;
+@media (max-width: 576px) {
+    .certs-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Contact Section */
